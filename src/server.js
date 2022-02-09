@@ -2,8 +2,9 @@ import express from "express" // 3RD PARTY MODULE DOES NEED TO INSTALL
 import listEndpoints from "express-list-endpoints"
 import cors from "cors"
 import pool from "./lib/connect.js"
-import authorsRouter from "./services/authors/index.js"
+
 import productRouter from "./services/Proudct/product.js"
+import reviewRouter from "./services/Review/review.js"
 import { join } from "path"
 import { badReequestHandler, unauthorizedtHandler, notFoundHandler, genericErrorHandler } from "./errorHandler.js"
 
@@ -37,8 +38,9 @@ server.use(express.json()) // if this not worte here the request body will be un
 server.use(express.static(publicFolderPath)) // thid help us to use the link for images
 
 // ************************** ENDPOINT ****************
-server.use("/authors", authorsRouter)
+// server.use("/authors", authorsRouter)
 server.use("/products", productRouter)
+server.use("/reviews", reviewRouter)
 
 // ====================================ERROR MIDDLEWARES======================================
 
