@@ -7,6 +7,7 @@ import productRouter from "./services/Proudct/product.js"
 import reviewRouter from "./services/Review/review.js"
 import { join } from "path"
 import { badReequestHandler, unauthorizedtHandler, notFoundHandler, genericErrorHandler } from "./errorHandler.js"
+import createTables from "./lib/create-tables.js"
 
 const server = express() // declearing server
 
@@ -53,8 +54,10 @@ console.table(listEndpoints(server)) // TO PRINT THE END POINT TABLE ON TERMINAL
 
 const port = process.env.PORT || 3005
 server.listen(port, () => {
+  // createTables()
   console.log("SEREVER IS 🏃‍♂️🏃‍♂️🏃‍♂️🏃‍♂️ ON PORT", port)
 })
+
 server.on("error", () => {
   console.log(`server is stooped :${error}`)
 })

@@ -5,7 +5,7 @@ const reviewRouter = Router()
 
 reviewRouter.get("/", async (req, res, next) => {
   try {
-    const result = await pool.query(`SELECT * FROM reviews JOIN products ON reviews.product_id=products.product_id;`)
+    const result = await pool.query(`SELECT * FROM reviews `) // JOIN products ON reviews.product_id=products.product_id;
     res.send(result.rows)
   } catch (error) {
     res.status(500).send({ message: error.message })
@@ -26,9 +26,9 @@ reviewRouter.get("/:review_id", async (req, res, next) => {
   }
 })
 
-reviewRouter.post("/", async (req, res, next) => {
+reviewRouter.post("/:product_id/review", async (req, res, next) => {
   try {
-    const result = await pool.query(`INSERT INTO reviews(comment,review_rate,product_id) VALUES($1,$2,$3) RETURNING *;`, [req.body.comment, req.body.review_rate, req.body.product_id])
+    const result = await pool.query(`INSERT INTO reviews(comment,review_rate,product_id) VALUES($1,$2,$3) RETURNING *;`, [...Object.values(req.body), req.params.product_id])
     //  Object.values(req.body)-- shortuct
     res.send(result.rows[0])
   } catch (error) {

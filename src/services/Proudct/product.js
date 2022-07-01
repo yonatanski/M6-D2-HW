@@ -6,23 +6,28 @@ const productRouter = Router()
 productRouter.get("/", async (req, res, next) => {
   try {
     const result = await pool.query(`SELECT * FROM products;`)
+    // await pool.end()
     res.send(result.rows)
   } catch (error) {
     res.status(500).send({ message: error.message })
+    console.log(error)
   }
 })
 
 productRouter.get("/:product_id", async (req, res, next) => {
   // JOIN reviews ON products.review_id=reviews.review_id
   try {
-    const result = await pool.query(`SELECT * FROM products  WHERE product_id=$1;`, [req.params.product_id])
-    if (result.rows[0]) {
-      res.send(result.rows)
+    const getProductsResponse = await pool.query(`SELECT * FROM products  WHERE product_id=$1;`, [req.params.product_id])
+    const getReviewsResponse = await pool.query("SELECT * FROM reviews WHERE product_id=$1", [req.params.product_id])
+    const product = getProductsResponse.rows[0]
+    if (product) {
+      res.send({ ...product, reviews: getReviewsResponse.rows })
     } else {
       res.status(404).send({ message: "No such product." })
     }
   } catch (error) {
     res.status(500).send({ message: error.message })
+    console.log(error)
   }
 })
 
